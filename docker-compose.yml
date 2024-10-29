@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql:5.7
+    container_name: my-db
+    environment:
+      MYSQL_ROOT_PASSWORD: pass
+      MYSQL_DATABASE: mydb
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./back.sql:/docker-entrypoint-initdb.d/back.sql
+
+  backend:
+    build: .
+    container_name: my-backend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+
+volumes:
+  db_data:
